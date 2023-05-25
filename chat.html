@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat - Zobble Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
+        }
+    </style>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #171e29;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 0 auto;
+            margin-top: 64px;
+            height: calc(100vh - 64px);
+        }
+
+        * {
+            outline: 0
+        }
+
+        .message-history {
+            position: fixed;
+            top: 50px;
+            left: 0px;
+            width: 100%;
+            height: calc(100% - 100px);
+            max-height: calc(100% - 100px);
+            background: #171e29;
+            overflow-y: scroll;
+        }
+
+        .message {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            word-wrap: break-word;
+            width: 100%;
+        }
+
+        .text-input {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0px;
+            width: calc(100% - 0px);
+            background-color: #171e29;
+        }
+
+            .text-input input[type="text"] {
+                width: calc(100% - 64px);
+                font-size: 1rem;
+                border-radius: 0px;
+                border: 0;
+                background: #171e29;
+                color: white;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .text-input button {
+                background-color: #15d1cb;
+                color: #fff;
+                width: 30px;
+                height: 30px;
+                margin: 10px;
+                border-radius: 50%;
+                border: none;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+                .text-input button:hover {
+                    background-color: #0f9da3;
+                }
+
+                .text-input button span {
+                    margin: 0;
+                    padding: 0;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message-history" id="message-history"></div>
+        <div class="text-input">
+            <input type="text" id="message-input" placeholder="Type your message" />
+            <button id="send-button">
+                <span class="material-symbols-outlined">
+                    send
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        const socket = io('http://localhost:5021');
+
+        const messageHistory = document.getElementById('message-history');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        // Retrieve the user's token from the application storage
+        const userToken = localStorage.getItem('token');
+
+        // Send message to the server
+        function sendMessage() {
+            const message = messageInput.value.trim();
+
+            if (message !== '') {
+                socket.emit('send_message', userToken, { message: message }); // Pass the userToken as the first parameter
+                messageInput.value = '';
+            }
+        }
+
+        // Receive message from the server
+        function receiveMessage(data) {
+            const message = data.message;
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+
+            // Apply color based on the current theme
+            const bodyStyle = getComputedStyle(document.body);
+            const themeColor = bodyStyle.color;
+            messageElement.style.color = themeColor;
+
+            messageElement.textContent = message;
+            messageHistory.appendChild(messageElement);
+            messageHistory.scrollTop = messageHistory.scrollHeight;
+        }
+
+        // Change theme (if theme = light {blind()})
+        function changeTheme(data) {
+            if (data.theme === 0) { //blind
+                document.getElementsByTagName('body')[0].style.backgroundColor = "white";
+            }
+
+            if (data.theme === 1) { //purple
+                document.getElementsByTagName('body')[0].style.backgroundColor = "#4b2c5b";
+                document.getElementsByTagName('body')[0].style.color = "#fff";
+                document.querySelector('.container').style.marginTop = "64px";
+                document.querySelector('.message-history').style.backgroundColor = "#50316e";
+                document.querySelector('.text-input').style.backgroundColor = "#4b2c5b";
+                document.querySelector('.text-input input[type="text"]').style.border = "1px solid #ddd";
+                document.querySelector('.text-input button').style.backgroundColor = "#15d1cb";
+            }
+
+            if (data.theme === 2) { //hacker man green
+                document.getElementsByTagName('body')[0].style.backgroundColor = "#000";
+                document.getElementsByTagName('body')[0].style.color = "#0f0";
+                document.querySelector('.container').style.marginTop = "64px";
+                document.querySelector('.message-history').style.backgroundColor = "#111";
+                document.querySelector('.text-input').style.backgroundColor = "#000";
+                document.querySelector('.text-input input[type="text"]').style.border = "1px solid #0f0";
+                document.querySelector('.text-input button').style.backgroundColor = "#0f0";
+                var messages = document.querySelectorAll('.message');
+                for (var i = 0; i < messages.length; i++) {
+                    messages[i].style.color = "#0f0";
+                }
+            }
+        }
+
+        // Bind event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Listen for incoming messages
+        socket.on('receive_message', receiveMessage);
+
+        // Listen for theme changes
+        socket.on("change_theme", changeTheme)
+    </script>
+</body>
+</html>

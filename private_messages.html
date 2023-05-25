@@ -1,0 +1,150 @@
+<html>
+<head>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background-color: #36393F;
+        }
+
+        .banner {
+            background-color: #2F3136;
+            color: #FFFFFF;
+            padding: 10px;
+        }
+
+        .content {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .friends-list {
+            background-color: #202225;
+            width: 200px;
+            padding: 10px;
+            overflow-y: auto;
+            color: #FFFFFF;
+        }
+
+            .friends-list h3 {
+                margin-top: 0;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #747F8D;
+            }
+
+            .friends-list ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .friends-list li {
+                margin-bottom: 5px;
+                cursor: pointer;
+            }
+
+                .friends-list li:hover {
+                    background-color: #4E545C;
+                }
+
+        .dm-messages {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+            .dm-messages h3 {
+                margin-top: 0;
+                color: #FFFFFF;
+            }
+
+        .dm-message {
+            margin-bottom: 10px;
+        }
+
+            .dm-message p {
+                margin: 0;
+                padding: 5px 10px;
+                border-radius: 5px;
+                background-color: #40444B;
+                color: #FFFFFF;
+            }
+
+        .message-box {
+            padding: 10px;
+            display: flex;
+            background-color: #2F3136;
+        }
+
+            .message-box input {
+                flex-grow: 1;
+                padding: 8px;
+                border: none;
+                border-radius: 5px;
+                background-color: #40444B;
+                color: #FFFFFF;
+            }
+
+                .message-box input:focus {
+                    outline: none;
+                }
+
+            .message-box button {
+                padding: 8px 16px;
+                margin-left: 10px;
+                border: none;
+                border-radius: 5px;
+                background-color: #7289DA;
+                color: #FFFFFF;
+                cursor: pointer;
+            }
+
+                .message-box button:hover {
+                    background-color: #677BC4;
+                }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <!-- add stuff here and it will appear at the top-->
+    </div>
+    <div class="content">
+        <div class="friends-list">
+            <h3>Friends</h3>
+            <ul>
+                <li>Friend 1</li>
+                <li>Friend 2</li>
+                <li>Friend 3</li>
+                <li>Friend 4</li>
+                <li>Friend 5</li>
+            </ul>
+        </div>
+        <div class="dm-messages">
+            <h3>Friend 1</h3>
+            <div class="dm-message">
+                <p>Hey, how are you?</p>
+            </div>
+            <div class="dm-message">
+                <p>I'm good, thanks! How about you?</p>
+            </div>
+            <div class="dm-message">
+                <p>Doing great! Just wanted to catch up.</p>
+            </div>
+            <div class="dm-message">
+                <p>That's awesome! Let's plan a meetup soon.</p>
+            </div>
+        </div>
+    </div>
+    <div class="message-box">
+        <input type="text" placeholder="Type your message...">
+        <button>Send</button>
+    </div>
+
+
+</body>
+</html>
